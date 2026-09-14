@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/UNN-ITMM-Software/mp2-lab1-set.svg)][travis]
 
 <!-- TODO
-  -
+  - sas
 -->
 
 ## Новости
