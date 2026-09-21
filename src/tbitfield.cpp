@@ -6,7 +6,6 @@
 // Битовое поле
 
 #include "../include/tbitfield.h"
-// #include <math.h>
 
 // Fake variables used as placeholders in tests
 static const int FAKE_INT = -1;
@@ -104,33 +103,103 @@ TBitField &TBitField::operator=(const TBitField &bf) // присваивание
 
 int TBitField::operator==(const TBitField &bf) const // сравнение
 {
-  return FAKE_INT;
+  if (BitLen != bf.BitLen) {
+    return false;
+  }
+  for (int i = 0; i < MemLen - 1; ++i) {
+    if (pMem[i] != bf.pMem[i]) {
+      return false;
+    }
+  }
+  for (int i = (MemLen - 1) * sizeof(TELEM) * 8; i < BitLen; ++i) {
+    if (GetBit(i) != bf.GetBit(i)) {
+      return false;
+    }
+  }
+  return true;
 }
 
 int TBitField::operator!=(const TBitField &bf) const // сравнение
 {
-  return FAKE_INT;
+  return !(*this == bf);
 }
 
 TBitField TBitField::operator|(const TBitField &bf) // операция "или"
 {
-  return FAKE_BITFIELD;
+  int max_len = (BitLen > bf.BitLen) ? BitLen : bf.BitLen;
+  TBitField res(max_len);
+
+  for (int i = BitLen; i < (MemLen * sizeof(TELEM) * 8); ++i) {
+    ClrBit(i);
+  }
+
+  for (int i = 0; i < MemLen; ++i) {
+    res.pMem[i] = pMem[i];
+  }
+
+  for (int i = 0; i < bf.MemLen; ++i) {
+    res.pMem[i] |= bf.pMem[i];
+  }
+
+  return res;
 }
 
 TBitField TBitField::operator&(const TBitField &bf) // операция "и"
 {
-  return FAKE_BITFIELD;
+  int max_len = (BitLen > bf.BitLen) ? BitLen : bf.BitLen;
+  TBitField res(max_len);
+
+  for (int i = BitLen; i < (MemLen * sizeof(TELEM) * 8); ++i) {
+    SetBit(i);
+  }
+
+  for (int i = 0; i < MemLen; ++i) {
+    res.pMem[i] = pMem[i];
+  }
+
+  for (int i = 0; i < bf.MemLen; ++i) {
+    res.pMem[i] &= bf.pMem[i];
+  }
+
+  return res;
 }
 
 TBitField TBitField::operator~(void) // отрицание
 {
-  return FAKE_BITFIELD;
+  TBitField res(*this);
+
+  for (int i = 0; i < MemLen - 1; ++i) {
+    res.pMem[i] = ~res.pMem[i];
+  }
+
+  for (int i = (MemLen - 1) * sizeof(TELEM) * 8; i < BitLen; ++i) {
+    if (res.GetBit(i) == 1) {
+      res.ClrBit(i);
+    } else {
+      res.SetBit(i);
+    }
+  }
+
+  return res;
 }
 
 // ввод/вывод
 
 istream &operator>>(istream &istr, TBitField &bf) // ввод
 {
+  char tmp;
+  int i = 0;
+  while (1) {
+    istr >> tmp;
+    if (tmp == '1') {
+      bf.SetBit(i);
+    } else if (tmp == '0') {
+      bf.ClrBit(i);
+    } else {
+      break;
+    }
+    ++i;
+  }
   return istr;
 }
 
