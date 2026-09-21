@@ -1,9 +1,22 @@
-set(target ${MP2_TESTS})
+# set(target ${MP2_TESTS})
 
-file(GLOB hdrs "*.h*")
-file(GLOB srcs "*.cpp")
+# file(GLOB hdrs "*.h*")
+# file(GLOB srcs "*.cpp")
 
-include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty")
+# include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty")
 
-add_executable(${target} ${srcs} ${hdrs})
-target_link_libraries(${target} gtest ${MP2_LIBRARY})
+# add_executable(${target} ${srcs} ${hdrs})
+# target_link_libraries(${target} gtest ${MP2_LIBRARY})
+
+cmake_minimum_required(VERSION 3.12)
+project(GTestDemo CXX)
+
+set(CMAKE_CXX_STANDARD 11)
+
+# Поиск установленного в систему GTest
+find_package(GTest REQUIRED)
+
+add_executable(run_tests test_main.cpp)
+
+# Линковка исполняемого файла с библиотекой GTest
+target_link_libraries(run_tests GTest::gtest)
