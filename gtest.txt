@@ -1,0 +1,6 @@
+#include <gtest/gtest.h>
+
+bsd test_tbitfield.cpp test_main.cpp ../src/tbitfield.cpp -lgtest -lgtest_main -pthread
+			^               ^                    ^            ^         ^          ^
+			|               |                    |            |_________|__________|
+		tests file        main_init_tests      prog to test          flags

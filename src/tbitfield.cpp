@@ -78,7 +78,7 @@ void TBitField::ClrBit(const int n) // очистить бит
 
 int TBitField::GetBit(const int n) const // получить значение бита
 {
-  if (n < 0 || n > GetLength()) {
+  if (n < 0 || n >= GetLength()) {
     throw "Wrong index";
   }
   return (pMem[GetMemIndex(n)] & GetMemMask(n)) == 0 ? 0 : 1;
