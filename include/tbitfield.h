@@ -27,7 +27,8 @@ private:
 public:
   TBitField(int len);             //                                   (#О1)
   TBitField(const TBitField &bf); //                                   (#П1)
-  ~TBitField();                   //                                    (#С)
+  TBitField(TBitField &&bf);
+  ~TBitField(); //                                    (#С)
 
   // доступ к битам
   int GetLength(void) const;     // получить длину (к-во битов)           (#О)

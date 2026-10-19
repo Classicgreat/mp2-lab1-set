@@ -34,6 +34,14 @@ TBitField::TBitField(const TBitField &bf) // конструктор копиро
   }
 }
 
+TBitField::TBitField(TBitField &&bf) // конструктор перемещения
+{
+  BitLen = bf.BitLen;
+  MemLen = bf.MemLen;
+  pMem = bf.pMem;
+  bf.pMem = nullptr;
+}
+
 TBitField::~TBitField() {
   delete[] pMem;
   MemLen = 0;
@@ -124,41 +132,64 @@ int TBitField::operator!=(const TBitField &bf) const // сравнение
   return !(*this == bf);
 }
 
-TBitField TBitField::operator|(const TBitField &bf) // операция "или"
-{
+// TBitField TBitField::operator|(const TBitField &bf) // операция "или"
+// {
+//   int max_len = (BitLen > bf.BitLen) ? BitLen : bf.BitLen;
+//   TBitField res(max_len);
+
+//   for (int i = BitLen; i < (MemLen * sizeof(TELEM) * 8); ++i) {
+//     ClrBit(i);
+//   }
+
+//   for (int i = 0; i < MemLen; ++i) {
+//     res.pMem[i] = pMem[i];
+//   }
+
+//   for (int i = 0; i < bf.MemLen; ++i) {
+//     res.pMem[i] |= bf.pMem[i];
+//   }
+
+//   return res;
+// }
+TBitField TBitField::operator|(const TBitField &bf) {
   int max_len = (BitLen > bf.BitLen) ? BitLen : bf.BitLen;
   TBitField res(max_len);
 
-  for (int i = BitLen; i < (MemLen * sizeof(TELEM) * 8); ++i) {
-    ClrBit(i);
-  }
-
-  for (int i = 0; i < MemLen; ++i) {
+  for (int i = 0; i < MemLen; ++i)
     res.pMem[i] = pMem[i];
-  }
-
-  for (int i = 0; i < bf.MemLen; ++i) {
+  for (int i = 0; i < bf.MemLen; ++i)
     res.pMem[i] |= bf.pMem[i];
-  }
 
   return res;
 }
 
-TBitField TBitField::operator&(const TBitField &bf) // операция "и"
-{
+// TBitField TBitField::operator&(const TBitField &bf) // операция "и"
+// {
+//   int max_len = (BitLen > bf.BitLen) ? BitLen : bf.BitLen;
+//   TBitField res(max_len);
+
+//   for (int i = BitLen; i < (MemLen * sizeof(TELEM) * 8); ++i) {
+//     SetBit(i);
+//   }
+
+//   for (int i = 0; i < MemLen; ++i) {
+//     res.pMem[i] = pMem[i];
+//   }
+
+//   for (int i = 0; i < bf.MemLen; ++i) {
+//     res.pMem[i] &= bf.pMem[i];
+//   }
+
+//   return res;
+// }
+TBitField TBitField::operator&(const TBitField &bf) {
   int max_len = (BitLen > bf.BitLen) ? BitLen : bf.BitLen;
   TBitField res(max_len);
 
-  for (int i = BitLen; i < (MemLen * sizeof(TELEM) * 8); ++i) {
-    SetBit(i);
-  }
+  int minMem = (MemLen < bf.MemLen) ? MemLen : bf.MemLen;
 
-  for (int i = 0; i < MemLen; ++i) {
-    res.pMem[i] = pMem[i];
-  }
-
-  for (int i = 0; i < bf.MemLen; ++i) {
-    res.pMem[i] &= bf.pMem[i];
+  for (int i = 0; i < minMem; ++i) {
+    res.pMem[i] = pMem[i] & bf.pMem[i];
   }
 
   return res;

@@ -1,0 +1,1 @@
+bsd test_tset.cpp test_tbitfield.cpp test_main.cpp ../src/tbitfield.cpp ../src/tset.cpp -lgtest -lgtest_main -pthread

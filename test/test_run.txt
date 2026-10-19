@@ -1,0 +1,1 @@
+bsd test_tbitfield.cpp test_main.cpp ../src/tbitfield.cpp -lgtest -lgtest_main -pthread
